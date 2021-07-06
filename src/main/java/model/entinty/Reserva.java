@@ -1,5 +1,7 @@
 package model.entinty;
 
+import model.entinty.model.exception.DomainException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -12,6 +14,9 @@ public class Reserva {
     public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public Reserva(Integer numApto, Date entrada, Date saida) {
+        if (!saida.after(entrada)) {
+            throw new DomainException("Erro na reserva: A data de saída precisa ser após a data de entrada.");
+        }
         NumApto = numApto;
         this.entrada = entrada;
         this.saida = saida;
@@ -38,18 +43,17 @@ public class Reserva {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public String remacarReserva(Date entrada, Date saida) {
+    public void remacarReserva(Date entrada, Date saida) {
         Date atual = new Date();
 
         if (entrada.before(atual) || saida.before(atual)) {
-            return "Erro na reserva: as datas para remarcar deverá ser futuras";
+            throw new DomainException("Erro na reserva: as datas para remarcar deverá ser futuras");
         }
         if (!saida.after(entrada)) {
-            return "Erro na reserva: A data de saída precisa ser após a data de entrada.";
+            throw new DomainException("Erro na reserva: A data de saída precisa ser após a data de entrada.");
         }
         this.entrada = entrada;
         this.saida = saida;
-        return null;
     }
 
     @Override
