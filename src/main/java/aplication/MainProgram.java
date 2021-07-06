@@ -31,15 +31,10 @@ public class MainProgram {
             System.out.println("Darta de saída: dd/mm/aaaa");
             saida = sdf.parse(sc.next());
 
-            Date atual = new Date();
-
-            if (entrada.before(atual) || saida.before(atual)){
-                System.out.println("Erro na reserva: as datas para remarcar deverá ser futuras");
-            }
-            else if(!saida.after(entrada)) {
-                System.out.println("Erro na reserva: A data de saída precisa ser após a data de entrada.");
-            }else {
-                reserva.remacarReserva(entrada, saida);
+            String erro = reserva.remacarReserva(entrada, saida);
+            if (erro != null) {
+                System.out.println("erro na reserva: " + erro);
+            } else {
                 System.out.println("Reserva: " + reserva.toString());
             }
 

@@ -38,9 +38,18 @@ public class Reserva {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public void remacarReserva(Date entrada, Date saida) {
+    public String remacarReserva(Date entrada, Date saida) {
+        Date atual = new Date();
+
+        if (entrada.before(atual) || saida.before(atual)) {
+            return "Erro na reserva: as datas para remarcar deverá ser futuras";
+        }
+        if (!saida.after(entrada)) {
+            return "Erro na reserva: A data de saída precisa ser após a data de entrada.";
+        }
         this.entrada = entrada;
         this.saida = saida;
+        return null;
     }
 
     @Override
